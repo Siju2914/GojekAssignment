@@ -1,0 +1,14 @@
+<suite name="FileComparator" verbose="2" parallel="methods" thread-count="100" >
+
+    <test name="FileComparator" group-by-instances="true">
+        <groups>
+            <run>
+                <include name="apitest" />
+            </run>
+        </groups>
+
+        <classes>
+            <class name="com.gojek.automation.APIResponseCheckerTest" />
+        </classes>
+    </test>
+</suite>
