@@ -3,6 +3,7 @@ package com.gojek.automation;
 import com.gojek.utils.FileManipulationInterface;
 import com.gojek.utils.FileManipulationUtil;
 import com.google.gson.Gson;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.testng.Assert;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -23,14 +24,13 @@ public class APIResponseCheckerTest {
     List<String> output = new ArrayList<String>();
     FileManipulationInterface fileManipulationInterfaceObject = new FileManipulationUtil();
     output = fileManipulationInterfaceObject.IComparator(file1, file2);
+    System.out.println(output);
     String file = this.getClass().getClassLoader().getResource("ExpectedOutput.json").getPath();
     BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
     String json = org.apache.commons.io.IOUtils.toString(reader);
     ExpectedOutput input = new Gson().fromJson(json, ExpectedOutput.class);
-    System.out.print(output);
     for(int i=0;i<output.size();i++) {
-      System.out.print(output.get(i));
-      Assert.assertEquals(output.get(i), input.getExpectedResults().get(i), "Url responses and expected results doesn't match");
+      Assert.assertEquals(output.get(i), input.getExpectedResults().get(i), "Responses does not match");
     }
   }
   @Parameters({ "file1", "file2" })

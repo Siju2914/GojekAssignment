@@ -96,7 +96,7 @@ public class FileManipulationUtil implements FileManipulationInterface {
         String response2 = apiUtilInterface.getRestAPI(secondUrl);
         if (check == true && checkwithListData == false) {
           UserDataPojo data = new Gson().fromJson(response, UserDataPojo.class);
-          UserDataPojo data2 = new Gson().fromJson(response2, UserDataPojo.class);
+          UserDataPojo data2 = new Gson().fromJson(response, UserDataPojo.class);
           if (data.getUserData().getId() == data2.getUserData().getId()
               && data.getUserData().getFirst_name().equals(data2.getUserData().getFirst_name())
               && data.getUserData().getLast_name().equals(data2.getUserData().getLast_name())
@@ -127,6 +127,11 @@ public class FileManipulationUtil implements FileManipulationInterface {
     }
     objReaderFile1.close();
     objReaderFile2.close();
+    for (String output:results
+         ) {
+      logger.info(output);
+
+    }
     return results;
   }
 }
