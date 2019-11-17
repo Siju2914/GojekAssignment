@@ -11,6 +11,13 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Test class.
@@ -26,7 +33,7 @@ public class APIResponseCheckerTest {
    * @throws Exception
    */
   @Parameters({ "file1", "file2" })
-  @Test(groups={"apitest"})
+  @Test(groups={"apitest"},enabled = false)
   public void test1(String file1, String file2) throws Exception {
     List<String> output = new ArrayList<String>();
     FileManipulationInterface fileManipulationInterfaceObject = new FileManipulationUtil();
@@ -48,13 +55,29 @@ public class APIResponseCheckerTest {
    * @throws Exception
    */
   @Parameters({ "file1", "file2" })
-  @Test(groups= {"apitest"})
+  @Test(groups= {"apitest"},enabled = false)
   public void TestThousandRecords(String file1, String file2) throws Exception {
     List<String> output = new ArrayList<String>();
     FileManipulationInterface fileManipulationInterfaceObject = new FileManipulationUtil();
     output=fileManipulationInterfaceObject.IComparator(file1,file2);
     for(int i=0;i<output.size();i++) {
       System.out.print(output.get(i));
+    }
+  }
+  @Parameters({ "file1", "file2" })
+  @Test(groups= {"apitest"})
+  public void testThousandRecordsUsingMultithreading(String file1, String file2) throws Exception {
+    FileManipulationInterface fileManipulationInterfaceObject = new FileManipulationUtil();
+    ThreadPoolExecutor pool = new ThreadPoolExecutor(5, 5, 5, TimeUnit.MINUTES,
+        new LinkedBlockingQueue<Runnable>());
+    CompletionService<List<String>> completionService = new ExecutorCompletionService<List<String>>(pool);
+    List<Future<List<String>>> tasks = new ArrayList<Future<List<String>>>();
+    Callable<List<String>> callableObject = () -> {
+      return fileManipulationInterfaceObject.IComparator(file1,file2);
+    };
+    tasks.add(completionService.submit(callableObject));
+    for (Future<List<String>> task : tasks) {
+      completionService.take();
     }
   }
 
