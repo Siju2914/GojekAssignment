@@ -10,5 +10,6 @@ public interface FileManipulationInterface {
 
   public String getFileExtension(File file);
   public List<String> readTxtFile(String fileName) throws IOException, UnsupportedFileTypeException;
+  public List<String> IComparator(String file1, String file2) throws IOException;
 
 }
