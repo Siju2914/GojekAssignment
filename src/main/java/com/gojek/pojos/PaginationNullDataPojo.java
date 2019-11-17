@@ -2,6 +2,9 @@ package com.gojek.pojos;
 
 import java.util.List;
 
+/**
+ * Pojo for api response with data null.
+ */
 public class PaginationNullDataPojo {
 
 

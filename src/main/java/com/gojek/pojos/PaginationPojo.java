@@ -2,7 +2,9 @@ package com.gojek.pojos;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Pojo for api response.
+ */
 public class PaginationPojo {
 
   int page;
